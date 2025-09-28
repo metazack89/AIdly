@@ -634,14 +634,87 @@ const MedicalProcedure = ({ procedure, onClose }) => {
                 size="sm"
                 onClick={handleVoiceToggle}
                 data-testid="voice-toggle-btn"
+                className={isVoiceMode ? 'bg-green-50 border-green-200' : ''}
               >
-                {isVoiceMode ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                {isVoiceMode ? (
+                  <Volume2 className="w-4 h-4 text-green-600" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
               </Button>
               <Button variant="outline" size="sm" onClick={onClose}>
                 <XCircle className="w-4 h-4" />
               </Button>
             </div>
           </div>
+          
+          {/* Voice Controls - Solo visible en modo voz */}
+          {isVoiceMode && (
+            <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${voiceStatus.isPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+                  <span className="text-sm font-medium text-green-800">
+                    Asistente de Voz {voiceStatus.isPlaying ? 'Activo' : 'Listo'}
+                  </span>
+                </div>
+                <Badge variant="outline" className="text-xs">
+                  Español Latino
+                </Badge>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleVoicePause}
+                  disabled={!voiceStatus.isPlaying && !voiceStatus.isPaused}
+                  className="text-xs"
+                >
+                  {voiceStatus.isPaused ? (
+                    <><Play className="w-3 h-3 mr-1" />Continuar</>
+                  ) : (
+                    <><Pause className="w-3 h-3 mr-1" />Pausar</>
+                  )}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleVoiceRepeat}
+                  className="text-xs"
+                >
+                  <SkipForward className="w-3 h-3 mr-1 rotate-180" />
+                  Repetir
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleVoiceStop}
+                  disabled={!voiceStatus.isPlaying && !voiceStatus.isPaused}
+                  className="text-xs"
+                >
+                  <XCircle className="w-3 h-3 mr-1" />
+                  Detener
+                </Button>
+                
+                <div className="flex items-center gap-1 ml-auto">
+                  <input
+                    type="checkbox"
+                    id="autoAdvance"
+                    checked={autoAdvance}
+                    onChange={(e) => setAutoAdvance(e.target.checked)}
+                    className="rounded"
+                  />
+                  <label htmlFor="autoAdvance" className="text-xs text-green-700">
+                    Auto-avanzar
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <Progress value={progress} className="h-2" />
           <div className="flex justify-between items-center mt-4">
             <Badge variant="secondary">Paso {currentStep + 1} de {procedure.steps.length}</Badge>
