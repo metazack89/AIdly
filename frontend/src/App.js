@@ -651,8 +651,10 @@ class VoiceAssistant {
       isEnabled: this.isEnabled,
       isPlaying: this.isPlaying,
       isPaused: this.isPaused,
-      hasResponsiveVoice: !!window.responsiveVoice,
-      currentVoice: this.voice
+      hasWebSpeech: 'speechSynthesis' in window,
+      hasResponsiveVoice: this.hasResponsiveVoice,
+      currentVoice: this.voice,
+      availableVoices: 'speechSynthesis' in window ? speechSynthesis.getVoices().length : 0
     };
   }
 }
