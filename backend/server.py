@@ -356,20 +356,20 @@ async def get_medical_procedures(category: Optional[str] = None):
         },
         {
             "id": "burns-minor",
-            "name": "Minor Burns",
-            "description": "Treatment for minor burns and scalds",
+            "name": "Quemaduras Menores",
+            "description": "Tratamiento para quemaduras leves y escaldaduras que no son graves",
             "category": "burns",
-            "difficulty": "basic",
+            "difficulty": "básico",
             "duration_minutes": 10,
             "images": [
                 "https://images.unsplash.com/photo-1624638760852-8ede1666ab07?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHwzfHxmaXJzdCUyMGFpZHxlbnwwfHx8fDE3NTkwMzA2NTN8MA&ixlib=rb-4.1.0&q=85"
             ],
             "steps": [
-                {"step": 1, "title": "Remove from Heat", "description": "Move person away from heat source immediately", "duration": 5},
-                {"step": 2, "title": "Cool the Burn", "description": "Run cool (not cold) water over burn for 10-20 minutes", "duration": 600},
-                {"step": 3, "title": "Remove Jewelry", "description": "Remove jewelry/clothing from burned area before swelling occurs", "duration": 30},
-                {"step": 4, "title": "Protect the Burn", "description": "Cover with sterile gauze bandage, do not use ice or butter", "duration": 60},
-                {"step": 5, "title": "Pain Relief", "description": "Over-the-counter pain medication if needed", "duration": 5}
+                {"step": 1, "title": "Alejar del calor", "description": "Retira inmediatamente a la persona de la fuente de calor. Asegúrate de que esté en un lugar seguro", "duration": 5},
+                {"step": 2, "title": "Enfriar la quemadura", "description": "Aplica agua fresca, no fría, sobre la quemadura durante 10 a 20 minutos. Esto aliviará el dolor", "duration": 600},
+                {"step": 3, "title": "Retirar objetos", "description": "Quita cuidadosamente joyas y ropa suelta del área quemada antes de que se inflame", "duration": 30},
+                {"step": 4, "title": "Proteger la herida", "description": "Cubre con una gasa estéril limpia. Nunca uses hielo, mantequilla o remedios caseros", "duration": 60},
+                {"step": 5, "title": "Aliviar el dolor", "description": "Si es necesario, puedes dar medicamentos para el dolor que se vendan sin receta médica", "duration": 5}
             ]
         },
         {
