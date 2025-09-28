@@ -65,16 +65,16 @@ const EMERGENCY_PROCEDURES = {
   'burns-minor': {
     id: 'burns-minor',
     name: 'Quemaduras Menores',
-    description: 'Tratamiento para quemaduras menores y escaldaduras',
+    description: 'Tratamiento para quemaduras leves y escaldaduras que no son graves',
     category: 'burns',
-    difficulty: 'basic',
+    difficulty: 'básico',
     duration_minutes: 10,
     steps: [
-      { step: 1, title: 'Alejar del Calor', description: 'Mueve a la persona lejos de la fuente de calor inmediatamente', duration: 5 },
-      { step: 2, title: 'Enfriar la Quemadura', description: 'Aplica agua fría (no helada) sobre la quemadura por 10-20 minutos', duration: 600 },
-      { step: 3, title: 'Quitar Joyas', description: 'Retira joyas/ropa del área quemada antes de que ocurra hinchazón', duration: 30 },
-      { step: 4, title: 'Proteger la Quemadura', description: 'Cubre con vendaje de gasa estéril, no uses hielo o mantequilla', duration: 60 },
-      { step: 5, title: 'Alivio del Dolor', description: 'Medicamento para el dolor de venta libre si es necesario', duration: 5 }
+      { step: 1, title: 'Alejar del calor', description: 'Retira inmediatamente a la persona de la fuente de calor. Asegúrate de que esté en un lugar seguro', duration: 5 },
+      { step: 2, title: 'Enfriar la quemadura', description: 'Aplica agua fresca, no fría, sobre la quemadura durante 10 a 20 minutos. Esto aliviará el dolor', duration: 600 },
+      { step: 3, title: 'Retirar objetos', description: 'Quita cuidadosamente joyas y ropa suelta del área quemada antes de que se inflame', duration: 30 },
+      { step: 4, title: 'Proteger la herida', description: 'Cubre con una gasa estéril limpia. Nunca uses hielo, mantequilla o remedios caseros', duration: 60 },
+      { step: 5, title: 'Aliviar el dolor', description: 'Si es necesario, puedes dar medicamentos para el dolor que se vendan sin receta médica', duration: 5 }
     ]
   },
   'wounds-bleeding': {
