@@ -338,20 +338,20 @@ async def get_medical_procedures(category: Optional[str] = None):
         },
         {
             "id": "choking-adult",
-            "name": "Adult Choking",
-            "description": "Heimlich maneuver for conscious adults",
+            "name": "Atragantamiento en Adultos",
+            "description": "Maniobra de Heimlich para adultos conscientes que se están atragantando",
             "category": "choking",
-            "difficulty": "basic",
+            "difficulty": "básico",
             "duration_minutes": 2,
             "images": [
                 "https://images.unsplash.com/photo-1580115465903-0e4a824a4e9a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHwxfHxmaXJzdCUyMGFpZHxlbnwwfHx8fDE3NTkwMzA2NTN8MA&ixlib=rb-4.1.0&q=85"
             ],
             "steps": [
-                {"step": 1, "title": "Assess the Situation", "description": "Ask 'Are you choking?' Look for signs: unable to speak, cough, or breathe", "duration": 5},
-                {"step": 2, "title": "Position Yourself", "description": "Stand behind the person, wrap arms around their waist", "duration": 5},
-                {"step": 3, "title": "Hand Placement", "description": "Make fist with one hand, place thumb side against abdomen above navel", "duration": 5},
-                {"step": 4, "title": "Abdominal Thrusts", "description": "Grasp fist with other hand, give quick upward thrusts", "duration": 30},
-                {"step": 5, "title": "Continue Until Clear", "description": "Repeat thrusts until object is expelled or person becomes unconscious", "duration": 0}
+                {"step": 1, "title": "Reconocer el atragantamiento", "description": "Pregunta si se está atragantando. Busca señales como no poder hablar, toser débilmente o dificultad para respirar", "duration": 5},
+                {"step": 2, "title": "Colocarse detrás", "description": "Párate detrás de la persona. Rodea su cintura con tus brazos manteniendo la calma", "duration": 5},
+                {"step": 3, "title": "Formar el puño", "description": "Haz un puño con una mano. Coloca el lado del pulgar contra el abdomen, justo arriba del ombligo", "duration": 5},
+                {"step": 4, "title": "Empujes abdominales", "description": "Agarra el puño con la otra mano. Realiza empujes rápidos y firmes hacia arriba y hacia adentro", "duration": 30},
+                {"step": 5, "title": "Continuar hasta desalojar", "description": "Repite los empujes hasta que el objeto salga o la persona pierda el conocimiento. Mantén la calma", "duration": 0}
             ]
         },
         {
