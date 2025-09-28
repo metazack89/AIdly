@@ -446,14 +446,20 @@ class VoiceAssistant {
     }
   }
 
-  async cacheAudioForOffline(text) {
+  async cacheAudioForOffline(text, procedureId = null, stepNumber = null) {
     try {
-      // Simular caché de audio para uso offline
-      const audioId = btoa(text).substring(0, 20);
+      // Crear ID único para el audio
+      const audioId = procedureId && stepNumber 
+        ? `${procedureId}_step_${stepNumber}`
+        : btoa(text).substring(0, 20);
+      
+      // Almacenar en caché local
       this.audioCache.set(audioId, {
         text: text,
         timestamp: Date.now(),
-        voice: this.voice
+        voice: this.voice,
+        procedureId,
+        stepNumber
       });
 
       // Almacenar en localStorage para persistencia
@@ -461,12 +467,71 @@ class VoiceAssistant {
       cachedAudios[audioId] = {
         text: text,
         timestamp: Date.now(),
-        voice: this.voice
+        voice: this.voice,
+        procedureId,
+        stepNumber
       };
       localStorage.setItem('aidly_audio_cache', JSON.stringify(cachedAudios));
 
+      // Notificar al service worker para caché avanzado
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'CACHE_AUDIO_DATA',
+          audioData: [{
+            id: audioId,
+            text: text,
+            data: null // Se generaría con ResponsiveVoice en implementación completa
+          }]
+        });
+      }
+
     } catch (error) {
       console.warn('No se pudo cachear el audio:', error);
+    }
+  }
+
+  async getOfflineAudio(procedureId, stepNumber) {
+    try {
+      const audioId = `${procedureId}_step_${stepNumber}`;
+      
+      // Intentar obtener del caché local primero
+      const localCache = this.audioCache.get(audioId);
+      if (localCache) {
+        return localCache.text;
+      }
+
+      // Intentar obtener del localStorage
+      const cachedAudios = JSON.parse(localStorage.getItem('aidly_audio_cache') || '{}');
+      const cachedAudio = cachedAudios[audioId];
+      if (cachedAudio) {
+        return cachedAudio.text;
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('No se pudo recuperar el audio offline:', error);
+      return null;
+    }
+  }
+
+  async initializeOfflineCache() {
+    // Cargar caché existente del localStorage
+    try {
+      const cachedAudios = JSON.parse(localStorage.getItem('aidly_audio_cache') || '{}');
+      Object.entries(cachedAudios).forEach(([id, data]) => {
+        this.audioCache.set(id, data);
+      });
+
+      // Solicitar al service worker que genere caché offline
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'GENERATE_OFFLINE_AUDIO'
+        });
+      }
+
+      console.log('✅ Caché de audio offline inicializado');
+    } catch (error) {
+      console.warn('No se pudo inicializar el caché offline:', error);
     }
   }
 
