@@ -274,13 +274,240 @@ const LandingPage = ({ onLogin }) => {
   );
 };
 
-// Medical Procedure Component
+// Voice Assistant Class para ResponsiveVoice
+class VoiceAssistant {
+  constructor() {
+    this.isEnabled = false;
+    this.isPlaying = false;
+    this.isPaused = false;
+    this.currentText = '';
+    this.audioCache = new Map();
+    this.voice = 'Spanish Latin American Female';
+    this.rate = 0.7;
+    this.pitch = 1.0;
+  }
+
+  async initialize() {
+    return new Promise((resolve) => {
+      if (window.responsiveVoice) {
+        console.log('✅ ResponsiveVoice cargado correctamente');
+        resolve(true);
+      } else {
+        // Esperar a que ResponsiveVoice se cargue
+        const checkResponsiveVoice = setInterval(() => {
+          if (window.responsiveVoice) {
+            clearInterval(checkResponsiveVoice);
+            console.log('✅ ResponsiveVoice cargado correctamente');
+            resolve(true);
+          }
+        }, 100);
+        
+        // Timeout después de 5 segundos
+        setTimeout(() => {
+          clearInterval(checkResponsiveVoice);
+          console.warn('⚠️ ResponsiveVoice no se pudo cargar, usando Web Speech API');
+          resolve(false);
+        }, 5000);
+      }
+    });
+  }
+
+  formatTextForSpeech(title, description) {
+    // Formatear texto para que sea más natural y calmado
+    const formattedTitle = title.replace(/[.,]/g, '');
+    const formattedDescription = description
+      .replace(/[()]/g, '')
+      .replace(/"/g, '')
+      .replace(/\n/g, '. ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    
+    return `${formattedTitle}. ${formattedDescription}`;
+  }
+
+  async speak(text, options = {}) {
+    if (!text) return;
+
+    const {
+      onStart = null,
+      onEnd = null,
+      autoCache = true
+    } = options;
+
+    this.currentText = text;
+    this.isPlaying = true;
+    this.isPaused = false;
+
+    if (onStart) onStart();
+
+    try {
+      if (window.responsiveVoice) {
+        // Usar ResponsiveVoice con voz latina
+        window.responsiveVoice.speak(text, this.voice, {
+          rate: this.rate,
+          pitch: this.pitch,
+          volume: 1,
+          onstart: () => {
+            this.isPlaying = true;
+            if (onStart) onStart();
+          },
+          onend: () => {
+            this.isPlaying = false;
+            this.isPaused = false;
+            if (onEnd) onEnd();
+          },
+          onerror: (error) => {
+            console.error('Error en ResponsiveVoice:', error);
+            this.fallbackToWebSpeech(text, onStart, onEnd);
+          }
+        });
+      } else {
+        // Fallback a Web Speech API
+        this.fallbackToWebSpeech(text, onStart, onEnd);
+      }
+
+      // Cachear audio si está habilitado
+      if (autoCache && 'caches' in window) {
+        this.cacheAudioForOffline(text);
+      }
+
+    } catch (error) {
+      console.error('Error en síntesis de voz:', error);
+      this.isPlaying = false;
+      if (onEnd) onEnd();
+    }
+  }
+
+  fallbackToWebSpeech(text, onStart, onEnd) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-MX'; // Español mexicano como fallback
+      utterance.rate = this.rate;
+      utterance.pitch = this.pitch;
+      utterance.volume = 1;
+
+      utterance.onstart = () => {
+        this.isPlaying = true;
+        if (onStart) onStart();
+      };
+
+      utterance.onend = () => {
+        this.isPlaying = false;
+        this.isPaused = false;
+        if (onEnd) onEnd();
+      };
+
+      utterance.onerror = (error) => {
+        console.error('Error en Web Speech API:', error);
+        this.isPlaying = false;
+        if (onEnd) onEnd();
+      };
+
+      speechSynthesis.speak(utterance);
+    }
+  }
+
+  pause() {
+    if (window.responsiveVoice && this.isPlaying) {
+      window.responsiveVoice.pause();
+      this.isPaused = true;
+    } else if ('speechSynthesis' in window) {
+      speechSynthesis.pause();
+      this.isPaused = true;
+    }
+  }
+
+  resume() {
+    if (window.responsiveVoice && this.isPaused) {
+      window.responsiveVoice.resume();
+      this.isPaused = false;
+    } else if ('speechSynthesis' in window) {
+      speechSynthesis.resume();
+      this.isPaused = false;
+    }
+  }
+
+  stop() {
+    if (window.responsiveVoice) {
+      window.responsiveVoice.cancel();
+    } else if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+    }
+    this.isPlaying = false;
+    this.isPaused = false;
+  }
+
+  repeat() {
+    if (this.currentText) {
+      this.stop();
+      setTimeout(() => {
+        this.speak(this.currentText);
+      }, 300);
+    }
+  }
+
+  async cacheAudioForOffline(text) {
+    try {
+      // Simular caché de audio para uso offline
+      const audioId = btoa(text).substring(0, 20);
+      this.audioCache.set(audioId, {
+        text: text,
+        timestamp: Date.now(),
+        voice: this.voice
+      });
+
+      // Almacenar en localStorage para persistencia
+      const cachedAudios = JSON.parse(localStorage.getItem('aidly_audio_cache') || '{}');
+      cachedAudios[audioId] = {
+        text: text,
+        timestamp: Date.now(),
+        voice: this.voice
+      };
+      localStorage.setItem('aidly_audio_cache', JSON.stringify(cachedAudios));
+
+    } catch (error) {
+      console.warn('No se pudo cachear el audio:', error);
+    }
+  }
+
+  getVoiceStatus() {
+    return {
+      isEnabled: this.isEnabled,
+      isPlaying: this.isPlaying,
+      isPaused: this.isPaused,
+      hasResponsiveVoice: !!window.responsiveVoice,
+      currentVoice: this.voice
+    };
+  }
+}
+
+// Medical Procedure Component con sistema de voz mejorado
 const MedicalProcedure = ({ procedure, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVoiceMode, setIsVoiceMode] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [voiceAssistant] = useState(() => new VoiceAssistant());
+  const [voiceStatus, setVoiceStatus] = useState({
+    isPlaying: false,
+    isPaused: false,
+    isEnabled: false
+  });
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [autoAdvance, setAutoAdvance] = useState(false);
+
+  useEffect(() => {
+    // Inicializar ResponsiveVoice
+    voiceAssistant.initialize().then((success) => {
+      setVoiceStatus(prev => ({
+        ...prev,
+        isEnabled: success
+      }));
+    });
+
+    return () => {
+      voiceAssistant.stop();
+    };
+  }, []);
 
   useEffect(() => {
     let interval;
@@ -294,50 +521,100 @@ const MedicalProcedure = ({ procedure, onClose }) => {
     return () => clearInterval(interval);
   }, [isRunning, timer]);
 
+  useEffect(() => {
+    // Auto-reproducir cuando cambia el paso en modo voz
+    if (isVoiceMode && procedure.steps[currentStep]) {
+      setTimeout(() => {
+        speakCurrentStep();
+      }, 500);
+    }
+  }, [currentStep, isVoiceMode]);
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const speak = (text) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.8;
-      speechSynthesis.speak(utterance);
-    }
+  const speakCurrentStep = () => {
+    const stepData = procedure.steps[currentStep];
+    if (!stepData) return;
+
+    const stepNumber = currentStep + 1;
+    const totalSteps = procedure.steps.length;
+    
+    // Texto más natural y calmado para emergencias médicas
+    const introText = stepNumber === 1 
+      ? `Iniciando procedimiento de ${procedure.name}. Paso ${stepNumber} de ${totalSteps}.`
+      : `Paso ${stepNumber} de ${totalSteps}.`;
+    
+    const mainText = voiceAssistant.formatTextForSpeech(stepData.title, stepData.description);
+    
+    // Agregar instrucciones de tiempo si existe
+    const timeText = stepData.duration > 0 
+      ? `Mantén esto durante ${stepData.duration} segundos.`
+      : '';
+
+    const fullText = `${introText} ${mainText} ${timeText}`.trim();
+
+    voiceAssistant.speak(fullText, {
+      onStart: () => {
+        setVoiceStatus(prev => ({ ...prev, isPlaying: true, isPaused: false }));
+      },
+      onEnd: () => {
+        setVoiceStatus(prev => ({ ...prev, isPlaying: false, isPaused: false }));
+        
+        // Auto-avanzar al siguiente paso si está habilitado
+        if (autoAdvance && currentStep < procedure.steps.length - 1) {
+          setTimeout(() => {
+            nextStep();
+          }, 2000);
+        }
+      }
+    });
   };
 
   const handleVoiceToggle = () => {
-    setIsVoiceMode(!isVoiceMode);
-    if (!isVoiceMode) {
-      const currentStepData = procedure.steps[currentStep];
-      speak(`${currentStepData.title}. ${currentStepData.description}`);
+    if (isVoiceMode) {
+      // Desactivar modo voz
+      setIsVoiceMode(false);
+      voiceAssistant.stop();
+      setVoiceStatus(prev => ({ ...prev, isPlaying: false, isPaused: false }));
     } else {
-      speechSynthesis.cancel();
+      // Activar modo voz
+      setIsVoiceMode(true);
+      speakCurrentStep();
     }
+  };
+
+  const handleVoicePause = () => {
+    if (voiceStatus.isPlaying && !voiceStatus.isPaused) {
+      voiceAssistant.pause();
+      setVoiceStatus(prev => ({ ...prev, isPaused: true }));
+    } else if (voiceStatus.isPaused) {
+      voiceAssistant.resume();
+      setVoiceStatus(prev => ({ ...prev, isPaused: false }));
+    }
+  };
+
+  const handleVoiceRepeat = () => {
+    voiceAssistant.repeat();
+  };
+
+  const handleVoiceStop = () => {
+    voiceAssistant.stop();
+    setVoiceStatus(prev => ({ ...prev, isPlaying: false, isPaused: false }));
   };
 
   const nextStep = () => {
     if (currentStep < procedure.steps.length - 1) {
-      const newStep = currentStep + 1;
-      setCurrentStep(newStep);
-      if (isVoiceMode) {
-        const stepData = procedure.steps[newStep];
-        speak(`Paso ${newStep + 1}. ${stepData.title}. ${stepData.description}`);
-      }
+      setCurrentStep(prev => prev + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
-      const newStep = currentStep - 1;
-      setCurrentStep(newStep);
-      if (isVoiceMode) {
-        const stepData = procedure.steps[newStep];
-        speak(`Paso ${newStep + 1}. ${stepData.title}. ${stepData.description}`);
-      }
+      setCurrentStep(prev => prev - 1);
     }
   };
 
