@@ -396,13 +396,17 @@ class VoiceAssistant {
   fallbackToWebSpeech(text, onStart, onEnd) {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-MX'; // Español mexicano como fallback
+      
+      // Configurar voz española latina óptima
+      this.configureSpanishVoice(utterance);
+      
       utterance.rate = this.rate;
       utterance.pitch = this.pitch;
       utterance.volume = 1;
 
       utterance.onstart = () => {
         this.isPlaying = true;
+        console.log('🎤 Reproduciendo audio con Web Speech API');
         if (onStart) onStart();
       };
 
@@ -418,7 +422,70 @@ class VoiceAssistant {
         if (onEnd) onEnd();
       };
 
-      speechSynthesis.speak(utterance);
+      // Evitar problemas de concurrencia
+      speechSynthesis.cancel();
+      setTimeout(() => {
+        speechSynthesis.speak(utterance);
+      }, 100);
+    }
+  }
+
+  configureSpanishVoice(utterance) {
+    // Prioridad de idiomas/dialectos españoles
+    const spanishLangCodes = [
+      'es-MX', // Español mexicano
+      'es-AR', // Español argentino  
+      'es-CO', // Español colombiano
+      'es-VE', // Español venezolano
+      'es-CL', // Español chileno
+      'es-PE', // Español peruano
+      'es-ES', // Español ibérico
+      'es'     // Español genérico
+    ];
+
+    // Intentar encontrar la mejor voz española disponible
+    const voices = speechSynthesis.getVoices();
+    let selectedVoice = null;
+
+    // Buscar voces españolas femeninas primero (más calmadas para emergencias)
+    for (const langCode of spanishLangCodes) {
+      const femaleVoice = voices.find(voice => 
+        voice.lang.toLowerCase().includes(langCode.toLowerCase()) && 
+        (voice.name.toLowerCase().includes('female') || 
+         voice.name.toLowerCase().includes('mujer') ||
+         voice.name.toLowerCase().includes('maria') ||
+         voice.name.toLowerCase().includes('carmen') ||
+         voice.gender === 'female')
+      );
+      
+      if (femaleVoice) {
+        selectedVoice = femaleVoice;
+        break;
+      }
+    }
+
+    // Si no hay voz femenina, buscar cualquier voz española
+    if (!selectedVoice) {
+      for (const langCode of spanishLangCodes) {
+        const spanishVoice = voices.find(voice => 
+          voice.lang.toLowerCase().includes(langCode.toLowerCase())
+        );
+        
+        if (spanishVoice) {
+          selectedVoice = spanishVoice;
+          break;
+        }
+      }
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      utterance.lang = selectedVoice.lang;
+      console.log(`🎤 Usando voz: ${selectedVoice.name} (${selectedVoice.lang})`);
+    } else {
+      // Fallback a español genérico
+      utterance.lang = 'es-MX';
+      console.log('🎤 Usando español genérico (es-MX)');
     }
   }
 
