@@ -331,7 +331,10 @@ class VoiceAssistant {
     const {
       onStart = null,
       onEnd = null,
-      autoCache = true
+      autoCache = true,
+      procedureId = null,
+      stepNumber = null,
+      offlineFirst = false
     } = options;
 
     this.currentText = text;
@@ -341,8 +344,17 @@ class VoiceAssistant {
     if (onStart) onStart();
 
     try {
-      if (window.responsiveVoice) {
-        // Usar ResponsiveVoice con voz latina
+      // Intentar usar audio offline primero si está configurado
+      if (offlineFirst && procedureId && stepNumber) {
+        const offlineText = await this.getOfflineAudio(procedureId, stepNumber);
+        if (offlineText) {
+          text = offlineText;
+          console.log('🔄 Usando audio cacheado offline');
+        }
+      }
+
+      if (window.responsiveVoice && navigator.onLine) {
+        // Usar ResponsiveVoice con voz latina (solo si hay conexión)
         window.responsiveVoice.speak(text, this.voice, {
           rate: this.rate,
           pitch: this.pitch,
@@ -362,19 +374,22 @@ class VoiceAssistant {
           }
         });
       } else {
-        // Fallback a Web Speech API
+        // Fallback a Web Speech API (funciona offline)
         this.fallbackToWebSpeech(text, onStart, onEnd);
       }
 
       // Cachear audio si está habilitado
       if (autoCache && 'caches' in window) {
-        this.cacheAudioForOffline(text);
+        this.cacheAudioForOffline(text, procedureId, stepNumber);
       }
 
     } catch (error) {
       console.error('Error en síntesis de voz:', error);
       this.isPlaying = false;
       if (onEnd) onEnd();
+
+      // Último recurso: usar Web Speech API
+      this.fallbackToWebSpeech(text, onStart, onEnd);
     }
   }
 
