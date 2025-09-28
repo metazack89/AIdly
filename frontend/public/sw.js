@@ -79,17 +79,17 @@ const EMERGENCY_PROCEDURES = {
   },
   'wounds-bleeding': {
     id: 'wounds-bleeding',
-    name: 'Sangrado Severo',
-    description: 'Controlar sangrado severo de heridas',
+    name: 'Hemorragia Severa',
+    description: 'Control de sangrado abundante en heridas que no se detienen',
     category: 'wounds',
-    difficulty: 'intermediate',
+    difficulty: 'intermedio',
     duration_minutes: 5,
     steps: [
-      { step: 1, title: 'Protégete', description: 'Usa guantes o usa una barrera entre tú y la sangre', duration: 10 },
-      { step: 2, title: 'Presión Directa', description: 'Aplica presión directa a la herida con paño limpio o gasa', duration: 30 },
-      { step: 3, title: 'Elevar si es Posible', description: 'Levanta el área lesionada por encima del nivel del corazón si es seguro hacerlo', duration: 5 },
-      { step: 4, title: 'Mantener Presión', description: 'Sigue aplicando presión, agrega más vendajes si la sangre empapa', duration: 180 },
-      { step: 5, title: 'Buscar Ayuda Médica', description: 'Llama a servicios de emergencia para sangrado severo', duration: 30 }
+      { step: 1, title: 'Protégete', description: 'Usa guantes si tienes, o coloca una barrera limpia entre tus manos y la sangre para evitar infecciones', duration: 10 },
+      { step: 2, title: 'Presión directa', description: 'Aplica presión firme y constante sobre la herida con un paño limpio o gasa. No retires el paño', duration: 30 },
+      { step: 3, title: 'Elevar si es posible', description: 'Si es seguro hacerlo, eleva la parte herida por encima del nivel del corazón para reducir el sangrado', duration: 5 },
+      { step: 4, title: 'Mantener presión', description: 'Continúa aplicando presión constante. Si la sangre empapa el vendaje, añade más encima sin quitar el anterior', duration: 180 },
+      { step: 5, title: 'Buscar ayuda médica', description: 'Llama inmediatamente a los servicios de emergencia. El sangrado severo requiere atención profesional urgente', duration: 30 }
     ]
   }
 };
