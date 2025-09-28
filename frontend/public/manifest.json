@@ -1,0 +1,136 @@
+{
+  "name": "Aidly - Asistente Médico de Emergencias",
+  "short_name": "Aidly",
+  "description": "Asistente médico para emergencias con guías de RCP, atragantamiento, quemaduras y heridas. Incluye modo voz y botón SOS para América Latina.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ef4444",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "es-ES",
+  "categories": ["medical", "health", "emergency", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "SOS Emergencia",
+      "short_name": "SOS",
+      "description": "Botón de emergencia rápido",
+      "url": "/?sos=true",
+      "icons": [
+        {
+          "src": "icons/sos-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Guías RCP",
+      "short_name": "RCP",
+      "description": "Instrucciones de reanimación cardiopulmonar",
+      "url": "/?procedure=cpr-adult",
+      "icons": [
+        {
+          "src": "icons/cpr-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Primeros Auxilios",
+      "short_name": "Auxilios",
+      "description": "Guías de primeros auxilios",
+      "url": "/?view=procedures",
+      "icons": [
+        {
+          "src": "icons/firstaid-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "screenshots": [
+    {
+      "src": "screenshots/home-wide.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Pantalla principal de Aidly en escritorio"
+    },
+    {
+      "src": "screenshots/home-narrow.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Pantalla principal de Aidly en móvil"
+    },
+    {
+      "src": "screenshots/procedures-wide.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Procedimientos médicos en escritorio"
+    },
+    {
+      "src": "screenshots/procedures-narrow.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Procedimientos médicos en móvil"
+    }
+  ]
+}
