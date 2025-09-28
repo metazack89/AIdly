@@ -318,22 +318,22 @@ async def get_medical_procedures(category: Optional[str] = None):
     procedures = [
         {
             "id": "cpr-adult",
-            "name": "Adult CPR",
-            "description": "Cardiopulmonary resuscitation for adults",
+            "name": "RCP para Adultos",
+            "description": "Reanimación cardiopulmonar para adultos que han perdido el conocimiento",
             "category": "cpr",
-            "difficulty": "intermediate",
+            "difficulty": "intermedio",
             "duration_minutes": 5,
             "images": [
                 "https://images.unsplash.com/photo-1622115297822-a3798fdbe1f6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxDUFJ8ZW58MHx8fHwxNzU5MDMwNjQ3fDA&ixlib=rb-4.1.0&q=85",
                 "https://images.unsplash.com/photo-1630964046403-8b745c1e3c69?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxDUFJ8ZW58MHx8fHwxNzU5MDMwNjQ3fDA&ixlib=rb-4.1.0&q=85"
             ],
             "steps": [
-                {"step": 1, "title": "Check Responsiveness", "description": "Tap the person's shoulders and shout 'Are you okay?'", "duration": 10},
-                {"step": 2, "title": "Call for Help", "description": "Call emergency services immediately or ask someone else to do it", "duration": 30},
-                {"step": 3, "title": "Position Hands", "description": "Place heel of one hand on center of chest between nipples, other hand on top", "duration": 15},
-                {"step": 4, "title": "Chest Compressions", "description": "Push hard and fast at least 2 inches deep, 100-120 compressions per minute", "duration": 120},
-                {"step": 5, "title": "Rescue Breaths", "description": "Tilt head back, lift chin, give 2 breaths", "duration": 10},
-                {"step": 6, "title": "Continue Cycles", "description": "30 compressions, 2 breaths. Continue until help arrives", "duration": 0}
+                {"step": 1, "title": "Verificar consciencia", "description": "Toca suavemente los hombros de la persona. Pregunta en voz alta si está bien. Observa si responde o se mueve", "duration": 10},
+                {"step": 2, "title": "Pedir ayuda médica", "description": "Llama inmediatamente al servicio de emergencias. Si hay alguien cerca, pídele que llame mientras tú continúas", "duration": 30},
+                {"step": 3, "title": "Posicionar las manos", "description": "Coloca el talón de una mano en el centro del pecho, entre los pezones. Pon la otra mano encima, entrelazando los dedos", "duration": 15},
+                {"step": 4, "title": "Comprensiones torácicas", "description": "Presiona fuerte y rápido, hundiendo el pecho al menos 5 centímetros. Mantén un ritmo de 100 a 120 compresiones por minuto", "duration": 120},
+                {"step": 5, "title": "Respiración de rescate", "description": "Inclina la cabeza hacia atrás, levanta la barbilla. Sella su boca con la tuya y da dos respiraciones lentas", "duration": 10},
+                {"step": 6, "title": "Continuar ciclos", "description": "Alterna 30 compresiones con 2 respiraciones. No te detengas hasta que llegue ayuda médica profesional", "duration": 0}
             ]
         },
         {
