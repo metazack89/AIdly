@@ -9,6 +9,8 @@ const PRECACHE_URLS = [
   '/static/js/bundle.js',
   '/static/css/main.css',
   '/manifest.json',
+  // ResponsiveVoice for offline voice support
+  'https://code.responsivevoice.org/responsivevoice.js',
   // Medical procedure images
   'https://images.unsplash.com/photo-1622115297822-a3798fdbe1f6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxDUFJ8ZW58MHx8fHwxNzU5MDMwNjQ3fDA&ixlib=rb-4.1.0&q=85',
   'https://images.unsplash.com/photo-1630964046403-8b745c1e3c69?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxDUFJ8ZW58MHx8fHwxNzU5MDMwNjQ3fDA&ixlib=rb-4.1.0&q=85',
