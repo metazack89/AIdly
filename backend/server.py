@@ -374,20 +374,20 @@ async def get_medical_procedures(category: Optional[str] = None):
         },
         {
             "id": "wounds-bleeding",
-            "name": "Severe Bleeding",
-            "description": "Control severe bleeding from wounds",
+            "name": "Hemorragia Severa",
+            "description": "Control de sangrado abundante en heridas que no se detienen",
             "category": "wounds",
-            "difficulty": "intermediate",
+            "difficulty": "intermedio",
             "duration_minutes": 5,
             "images": [
                 "https://images.pexels.com/photos/3760275/pexels-photo-3760275.jpeg"
             ],
             "steps": [
-                {"step": 1, "title": "Protect Yourself", "description": "Wear gloves or use barrier between you and blood", "duration": 10},
-                {"step": 2, "title": "Direct Pressure", "description": "Apply direct pressure to wound with clean cloth or gauze", "duration": 30},
-                {"step": 3, "title": "Elevate if Possible", "description": "Raise injured area above heart level if safe to do so", "duration": 5},
-                {"step": 4, "title": "Maintain Pressure", "description": "Keep applying pressure, add more bandages if blood soaks through", "duration": 180},
-                {"step": 5, "title": "Seek Medical Help", "description": "Call emergency services for severe bleeding", "duration": 30}
+                {"step": 1, "title": "Protégete", "description": "Usa guantes si tienes, o coloca una barrera limpia entre tus manos y la sangre para evitar infecciones", "duration": 10},
+                {"step": 2, "title": "Presión directa", "description": "Aplica presión firme y constante sobre la herida con un paño limpio o gasa. No retires el paño", "duration": 30},
+                {"step": 3, "title": "Elevar si es posible", "description": "Si es seguro hacerlo, eleva la parte herida por encima del nivel del corazón para reducir el sangrado", "duration": 5},
+                {"step": 4, "title": "Mantener presión", "description": "Continúa aplicando presión constante. Si la sangre empapa el vendaje, añade más encima sin quitar el anterior", "duration": 180},
+                {"step": 5, "title": "Buscar ayuda médica", "description": "Llama inmediatamente a los servicios de emergencia. El sangrado severo requiere atención profesional urgente", "duration": 30}
             ]
         }
     ]
