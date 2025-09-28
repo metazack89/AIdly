@@ -165,8 +165,29 @@
       window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           document.body.classList.add('app-loaded');
-        }, 1000);
+        }, 2000);
       });
+      
+      // Also hide loading screen when React mounts
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            const root = document.getElementById('root');
+            if (root && root.children.length > 0) {
+              setTimeout(() => {
+                document.body.classList.add('app-loaded');
+              }, 500);
+              observer.disconnect();
+            }
+          }
+        });
+      });
+      
+      // Start observing the root element
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        observer.observe(rootElement, { childList: true });
+      }
       
       // Handle PWA installation prompt
       let deferredPrompt;
