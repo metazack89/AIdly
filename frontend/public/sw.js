@@ -31,20 +31,20 @@ const EMERGENCY_PROCEDURES = {
   'cpr-adult': {
     id: 'cpr-adult',
     name: 'RCP para Adultos',
-    description: 'Reanimación cardiopulmonar para adultos',
+    description: 'Reanimación cardiopulmonar para adultos que han perdido el conocimiento',
     category: 'cpr',
-    difficulty: 'intermediate',
+    difficulty: 'intermedio',
     duration_minutes: 5,
     images: [
       'https://images.unsplash.com/photo-1622115297822-a3798fdbe1f6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxDUFJ8ZW58MHx8fHwxNzU5MDMwNjQ3fDA&ixlib=rb-4.1.0&q=85'
     ],
     steps: [
-      { step: 1, title: 'Verificar Respuesta', description: 'Toca los hombros y grita "¿Estás bien?"', duration: 10 },
-      { step: 2, title: 'Pedir Ayuda', description: 'Llama a emergencias inmediatamente o pide a alguien que lo haga', duration: 30 },
-      { step: 3, title: 'Posición de Manos', description: 'Coloca el talón de una mano en el centro del pecho entre los pezones, la otra mano encima', duration: 15 },
-      { step: 4, title: 'Compresiones Torácicas', description: 'Presiona fuerte y rápido al menos 2 pulgadas de profundidad, 100-120 compresiones por minuto', duration: 120 },
-      { step: 5, title: 'Respiración de Rescate', description: 'Inclina la cabeza hacia atrás, levanta la barbilla, da 2 respiraciones', duration: 10 },
-      { step: 6, title: 'Continuar Ciclos', description: '30 compresiones, 2 respiraciones. Continúa hasta que llegue ayuda', duration: 0 }
+      { step: 1, title: 'Verificar consciencia', description: 'Toca suavemente los hombros de la persona. Pregunta en voz alta si está bien. Observa si responde o se mueve', duration: 10 },
+      { step: 2, title: 'Pedir ayuda médica', description: 'Llama inmediatamente al servicio de emergencias. Si hay alguien cerca, pídele que llame mientras tú continúas', duration: 30 },
+      { step: 3, title: 'Posicionar las manos', description: 'Coloca el talón de una mano en el centro del pecho, entre los pezones. Pon la otra mano encima, entrelazando los dedos', duration: 15 },
+      { step: 4, title: 'Comprensiones torácicas', description: 'Presiona fuerte y rápido, hundiendo el pecho al menos 5 centímetros. Mantén un ritmo de 100 a 120 compresiones por minuto', duration: 120 },
+      { step: 5, title: 'Respiración de rescate', description: 'Inclina la cabeza hacia atrás, levanta la barbilla. Sella su boca con la tuya y da dos respiraciones lentas', duration: 10 },
+      { step: 6, title: 'Continuar ciclos', description: 'Alterna 30 compresiones con 2 respiraciones. No te detengas hasta que llegue ayuda médica profesional', duration: 0 }
     ]
   },
   'choking-adult': {
