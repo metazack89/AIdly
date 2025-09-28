@@ -531,10 +531,14 @@ async function removePendingAlert(alertId) {
   console.log(`[SW] Removing pending alert: ${alertId}`);
 }
 
-// Handle critical resource caching
+// Handle critical resource caching and audio caching
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'CACHE_EMERGENCY_DATA') {
     event.waitUntil(cacheEmergencyResources());
+  } else if (event.data && event.data.type === 'CACHE_AUDIO_DATA') {
+    event.waitUntil(cacheAudioResources(event.data.audioData));
+  } else if (event.data && event.data.type === 'GENERATE_OFFLINE_AUDIO') {
+    event.waitUntil(generateOfflineAudioCache());
   }
 });
 
@@ -557,6 +561,113 @@ async function cacheEmergencyResources() {
     console.log('[SW] Emergency resources cached successfully');
   } catch (error) {
     console.error('[SW] Failed to cache emergency resources:', error);
+  }
+}
+
+// Cache audio data for offline voice synthesis
+async function cacheAudioResources(audioData) {
+  try {
+    const cache = await caches.open('aidly-audio-cache');
+    
+    for (const audio of audioData) {
+      const audioBlob = new Blob([audio.data], { type: 'audio/wav' });
+      const audioResponse = new Response(audioBlob, {
+        headers: {
+          'Content-Type': 'audio/wav',
+          'X-Audio-Text': audio.text,
+          'X-Audio-Language': 'es-MX'
+        }
+      });
+      
+      await cache.put(`/audio/${audio.id}`, audioResponse);
+    }
+    
+    console.log('[SW] Audio resources cached for offline use');
+  } catch (error) {
+    console.error('[SW] Failed to cache audio resources:', error);
+  }
+}
+
+// Generate and cache audio for all emergency procedures
+async function generateOfflineAudioCache() {
+  console.log('[SW] Generating offline audio cache for emergency procedures');
+  
+  const audioTexts = [];
+  
+  // Generate audio texts for all procedures
+  Object.values(EMERGENCY_PROCEDURES).forEach(procedure => {
+    procedure.steps.forEach((step, index) => {
+      const stepNumber = index + 1;
+      const totalSteps = procedure.steps.length;
+      
+      const introText = stepNumber === 1 
+        ? `Iniciando procedimiento de ${procedure.name}. Paso ${stepNumber} de ${totalSteps}.`
+        : `Paso ${stepNumber} de ${totalSteps}.`;
+      
+      const mainText = `${step.title}. ${step.description}`;
+      const timeText = step.duration > 0 
+        ? `Mantén esto durante ${step.duration} segundos.`
+        : '';
+      
+      const fullText = `${introText} ${mainText} ${timeText}`.trim();
+      
+      audioTexts.push({
+        id: `${procedure.id}_step_${stepNumber}`,
+        text: fullText,
+        procedure: procedure.id,
+        step: stepNumber
+      });
+    });
+  });
+  
+  // Store audio text mappings for offline synthesis
+  try {
+    const cache = await caches.open('aidly-audio-text-cache');
+    
+    for (const audioText of audioTexts) {
+      const textResponse = new Response(JSON.stringify(audioText), {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Procedure-ID': audioText.procedure,
+          'X-Step-Number': audioText.step.toString()
+        }
+      });
+      
+      await cache.put(`/audio-text/${audioText.id}`, textResponse);
+    }
+    
+    console.log('[SW] Generated offline audio text cache with', audioTexts.length, 'entries');
+  } catch (error) {
+    console.error('[SW] Failed to generate offline audio cache:', error);
+  }
+}
+
+// Retrieve cached audio for offline use
+async function getCachedAudio(procedureId, stepNumber) {
+  try {
+    const audioId = `${procedureId}_step_${stepNumber}`;
+    
+    // Try to get pre-generated audio
+    const audioCache = await caches.open('aidly-audio-cache');
+    const audioResponse = await audioCache.match(`/audio/${audioId}`);
+    
+    if (audioResponse) {
+      return await audioResponse.blob();
+    }
+    
+    // Fallback to text for Web Speech API
+    const textCache = await caches.open('aidly-audio-text-cache');
+    const textResponse = await textCache.match(`/audio-text/${audioId}`);
+    
+    if (textResponse) {
+      const textData = await textResponse.json();
+      return { text: textData.text, fallbackToWebSpeech: true };
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('[SW] Failed to retrieve cached audio:', error);
+    return null;
   }
 }
 
