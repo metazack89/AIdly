@@ -637,7 +637,8 @@ const MedicalProcedure = ({ procedure, onClose }) => {
 
     const fullText = `${introText} ${mainText} ${timeText}`.trim();
 
-    voiceAssistant.speak(fullText, {
+    // Configuración mejorada para el audio
+    const voiceOptions = {
       onStart: () => {
         setVoiceStatus(prev => ({ ...prev, isPlaying: true, isPaused: false }));
       },
@@ -650,8 +651,14 @@ const MedicalProcedure = ({ procedure, onClose }) => {
             nextStep();
           }, 2000);
         }
-      }
-    });
+      },
+      autoCache: true,
+      procedureId: procedure.id,
+      stepNumber: stepNumber,
+      offlineFirst: !navigator.onLine // Usar caché offline si no hay conexión
+    };
+
+    voiceAssistant.speak(fullText, voiceOptions);
   };
 
   const handleVoiceToggle = () => {
