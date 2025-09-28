@@ -289,25 +289,45 @@ class VoiceAssistant {
 
   async initialize() {
     return new Promise((resolve) => {
-      if (window.responsiveVoice) {
-        console.log('✅ ResponsiveVoice cargado correctamente');
+      // Verificar si Web Speech API está disponible
+      if ('speechSynthesis' in window) {
+        console.log('✅ Web Speech API disponible');
+        
+        // Cargar voces disponibles
+        const loadVoices = () => {
+          const voices = speechSynthesis.getVoices();
+          const spanishVoices = voices.filter(voice => 
+            voice.lang.toLowerCase().includes('es')
+          );
+          
+          if (spanishVoices.length > 0) {
+            console.log(`✅ Encontradas ${spanishVoices.length} voces en español:`, 
+              spanishVoices.map(v => `${v.name} (${v.lang})`));
+          } else {
+            console.warn('⚠️ No se encontraron voces en español, usando voz por defecto');
+          }
+        };
+
+        // Las voces pueden cargarse de forma asíncrona
+        if (speechSynthesis.getVoices().length > 0) {
+          loadVoices();
+        } else {
+          speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Verificar si ResponsiveVoice está disponible como extra
+        if (window.responsiveVoice) {
+          console.log('✅ ResponsiveVoice también disponible como opción adicional');
+          this.hasResponsiveVoice = true;
+        } else {
+          console.log('ℹ️ Usando Web Speech API nativo (sin ResponsiveVoice)');
+          this.hasResponsiveVoice = false;
+        }
+
         resolve(true);
       } else {
-        // Esperar a que ResponsiveVoice se cargue
-        const checkResponsiveVoice = setInterval(() => {
-          if (window.responsiveVoice) {
-            clearInterval(checkResponsiveVoice);
-            console.log('✅ ResponsiveVoice cargado correctamente');
-            resolve(true);
-          }
-        }, 100);
-        
-        // Timeout después de 5 segundos
-        setTimeout(() => {
-          clearInterval(checkResponsiveVoice);
-          console.warn('⚠️ ResponsiveVoice no se pudo cargar, usando Web Speech API');
-          resolve(false);
-        }, 5000);
+        console.error('❌ Web Speech API no está disponible en este navegador');
+        resolve(false);
       }
     });
   }
