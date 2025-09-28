@@ -515,30 +515,34 @@ class VoiceAssistant {
   }
 
   pause() {
-    if (window.responsiveVoice && this.isPlaying) {
-      window.responsiveVoice.pause();
-      this.isPaused = true;
-    } else if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window && this.isPlaying) {
       speechSynthesis.pause();
+      this.isPaused = true;
+      console.log('⏸️ Audio pausado');
+    } else if (window.responsiveVoice && this.hasResponsiveVoice && this.isPlaying) {
+      window.responsiveVoice.pause();
       this.isPaused = true;
     }
   }
 
   resume() {
-    if (window.responsiveVoice && this.isPaused) {
-      window.responsiveVoice.resume();
-      this.isPaused = false;
-    } else if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window && this.isPaused) {
       speechSynthesis.resume();
+      this.isPaused = false;
+      console.log('▶️ Audio reanudado');
+    } else if (window.responsiveVoice && this.hasResponsiveVoice && this.isPaused) {
+      window.responsiveVoice.resume();
       this.isPaused = false;
     }
   }
 
   stop() {
-    if (window.responsiveVoice) {
-      window.responsiveVoice.cancel();
-    } else if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window) {
       speechSynthesis.cancel();
+      console.log('⏹️ Audio detenido');
+    }
+    if (window.responsiveVoice && this.hasResponsiveVoice) {
+      window.responsiveVoice.cancel();
     }
     this.isPlaying = false;
     this.isPaused = false;
