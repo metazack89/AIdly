@@ -576,12 +576,15 @@ const MedicalProcedure = ({ procedure, onClose }) => {
   const [autoAdvance, setAutoAdvance] = useState(false);
 
   useEffect(() => {
-    // Inicializar ResponsiveVoice
+    // Inicializar ResponsiveVoice y caché offline
     voiceAssistant.initialize().then((success) => {
       setVoiceStatus(prev => ({
         ...prev,
         isEnabled: success
       }));
+
+      // Inicializar caché offline después de la inicialización
+      voiceAssistant.initializeOfflineCache();
     });
 
     return () => {
