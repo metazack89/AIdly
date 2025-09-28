@@ -1,34 +1,248 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Inter font family for modern look */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }
 
-.App-link {
-    color: #61dafb;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom animations for medical emergency context */
+@keyframes pulse-emergency {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.emergency-pulse {
+  animation: pulse-emergency 2s ease-in-out infinite;
+}
+
+/* Ensure high contrast for accessibility */
+.high-contrast {
+  filter: contrast(1.2);
+}
+
+/* Medical procedure step transitions */
+.procedure-step {
+  transition: all 0.3s ease-in-out;
+}
+
+.procedure-step.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.procedure-step.inactive {
+  transform: translateX(-10px);
+  opacity: 0.7;
+}
+
+/* SOS button special effects */
+.sos-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.sos-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.sos-button:active::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Emergency alert styling */
+.emergency-alert {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid #ef4444;
+}
+
+/* Medical category colors */
+.category-cpr {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-left: 4px solid #f59e0b;
+}
+
+.category-choking {
+  background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+  border-left: 4px solid #0284c7;
+}
+
+.category-burns {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+  border-left: 4px solid #e91e63;
+}
+
+.category-wounds {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border-left: 4px solid #8b5cf6;
+}
+
+/* Voice mode indicator */
+.voice-active {
+  position: relative;
+}
+
+.voice-active::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive design for mobile-first approach */
+@media (max-width: 768px) {
+  .procedure-modal {
+    margin: 1rem;
+    max-height: 90vh;
+  }
+  
+  .sos-button {
+    bottom: 1rem;
+    right: 1rem;
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+/* Offline indicator */
+.offline-indicator {
+  background: #6b7280;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+/* Loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* PWA-specific styles */
+@media (display-mode: standalone) {
+  .pwa-header {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .pwa-content {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Focus management for accessibility */
+.focus-ring:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Emergency contact priority indicators */
+.priority-1 {
+  border-left: 4px solid #ef4444;
+}
+
+.priority-2 {
+  border-left: 4px solid #f97316;
+}
+
+.priority-3 {
+  border-left: 4px solid #eab308;
+}
+
+/* Gesture indicators for mobile */
+.swipe-hint {
+  position: relative;
+}
+
+.swipe-hint::after {
+  content: '← Desliza';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Dark mode support (for future implementation) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+}
+
+/* Print styles for emergency procedures */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-page-break {
+    page-break-before: always;
+  }
+  
+  .procedure-step {
+    break-inside: avoid;
+  }
 }
