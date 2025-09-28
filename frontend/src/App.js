@@ -373,8 +373,11 @@ class VoiceAssistant {
         }
       }
 
-      if (window.responsiveVoice && navigator.onLine) {
-        // Usar ResponsiveVoice con voz latina (solo si hay conexión)
+      // Usar Web Speech API como método principal (mejor compatibilidad)
+      if ('speechSynthesis' in window) {
+        this.fallbackToWebSpeech(text, onStart, onEnd);
+      } else if (window.responsiveVoice && navigator.onLine && this.hasResponsiveVoice) {
+        // ResponsiveVoice como fallback si Web Speech no está disponible
         window.responsiveVoice.speak(text, this.voice, {
           rate: this.rate,
           pitch: this.pitch,
@@ -390,12 +393,14 @@ class VoiceAssistant {
           },
           onerror: (error) => {
             console.error('Error en ResponsiveVoice:', error);
-            this.fallbackToWebSpeech(text, onStart, onEnd);
+            this.isPlaying = false;
+            if (onEnd) onEnd();
           }
         });
       } else {
-        // Fallback a Web Speech API (funciona offline)
-        this.fallbackToWebSpeech(text, onStart, onEnd);
+        console.error('❌ No hay sistema de síntesis de voz disponible');
+        this.isPlaying = false;
+        if (onEnd) onEnd();
       }
 
       // Cachear audio si está habilitado
