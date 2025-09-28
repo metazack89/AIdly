@@ -50,16 +50,16 @@ const EMERGENCY_PROCEDURES = {
   'choking-adult': {
     id: 'choking-adult',
     name: 'Atragantamiento en Adultos',
-    description: 'Maniobra de Heimlich para adultos conscientes',
+    description: 'Maniobra de Heimlich para adultos conscientes que se están atragantando',
     category: 'choking',
-    difficulty: 'basic',
+    difficulty: 'básico',
     duration_minutes: 2,
     steps: [
-      { step: 1, title: 'Evaluar la Situación', description: 'Pregunta "¿Te estás atragantando?" Busca signos: no puede hablar, toser o respirar', duration: 5 },
-      { step: 2, title: 'Posicionarse', description: 'Párate detrás de la persona, envuelve tus brazos alrededor de su cintura', duration: 5 },
-      { step: 3, title: 'Colocación de Manos', description: 'Haz un puño con una mano, coloca el lado del pulgar contra el abdomen sobre el ombligo', duration: 5 },
-      { step: 4, title: 'Compresiones Abdominales', description: 'Agarra el puño con la otra mano, da empujones rápidos hacia arriba', duration: 30 },
-      { step: 5, title: 'Continuar Hasta Despejar', description: 'Repite los empujones hasta que el objeto sea expulsado o la persona pierda el conocimiento', duration: 0 }
+      { step: 1, title: 'Reconocer el atragantamiento', description: 'Pregunta si se está atragantando. Busca señales como no poder hablar, toser débilmente o dificultad para respirar', duration: 5 },
+      { step: 2, title: 'Colocarse detrás', description: 'Párate detrás de la persona. Rodea su cintura con tus brazos manteniendo la calma', duration: 5 },
+      { step: 3, title: 'Formar el puño', description: 'Haz un puño con una mano. Coloca el lado del pulgar contra el abdomen, justo arriba del ombligo', duration: 5 },
+      { step: 4, title: 'Empujes abdominales', description: 'Agarra el puño con la otra mano. Realiza empujes rápidos y firmes hacia arriba y hacia adentro', duration: 30 },
+      { step: 5, title: 'Continuar hasta desalojar', description: 'Repite los empujes hasta que el objeto salga o la persona pierda el conocimiento. Mantén la calma', duration: 0 }
     ]
   },
   'burns-minor': {
