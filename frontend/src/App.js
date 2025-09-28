@@ -999,8 +999,8 @@ const Dashboard = ({ user, onLogout }) => {
             <CardHeader>
               <div className="flex justify-between items-start">
                 <CardTitle className="text-lg">{procedure.name}</CardTitle>
-                <Badge variant={procedure.difficulty === 'basic' ? 'secondary' : 'default'}>
-                  {procedure.difficulty === 'basic' ? 'Básico' : procedure.difficulty === 'intermediate' ? 'Intermedio' : 'Avanzado'}
+                <Badge variant={procedure.difficulty === 'básico' ? 'secondary' : 'default'}>
+                  {procedure.difficulty === 'básico' ? 'Básico' : procedure.difficulty === 'intermedio' ? 'Intermedio' : 'Avanzado'}
                 </Badge>
               </div>
             </CardHeader>
